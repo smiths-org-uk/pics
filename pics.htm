@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- Meta tag to make it mobile friendly -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		body {
+			margin: 0;
+			font-size: 0;
+		}
+
+		a, a:active, a:focus, a:visited {
+			text-decoration: none;
+		}
+
+		#wrapper {
+			max-width: 1500px;
+			margin: 0 auto;
+			text-align: center;
+		}
+
+		.pageText {
+			display: block;
+			font-family: Verdana, sans-serif;
+			font-size: 20px;
+			color: #727272;
+			margin-top: 20px;
+			margin-bottom: 20px;
+		}
+
+		#pageTitle {
+			font-size: 36px;
+			text-decoration: underline;
+		}
+
+		/*noinspection CssUnusedSymbol*/
+		.imageWrapper {
+			display: inline-block;
+			margin: 10px;
+			border: solid #d9d9d9 2px;
+			border-radius: 5px;
+			padding: 20px;
+			width: 300px;
+			height: 300px;
+			line-height: 300px;
+			text-align: center;
+		}
+
+		/*noinspection CssUnusedSymbol*/
+		.imageWrapper:hover {
+			border: solid #0436b2 2px;
+		}
+
+		/*noinspection CssUnusedSymbol*/
+		.image {
+			vertical-align: middle;
+		}
+
+		#bottom-block {
+			height: 300px;
+		}
+	</style>
+	<meta charset="UTF-8">
+	<meta name="" content="">
+	<title>Pictures</title>
+</head>
+<body>
+<div id="wrapper">
+	<span class="pageText" id="pageTitle"></span>
+	<span class="pageText">Big pics may take a while to load - please be patient</span>
+	<div id="allImages">
+		<!-- Template of what we're creating -->
+		<!--<a class="imageWrapper" href="IMAGE-NAME.jpg">-->
+		<!--<img class="image" src="IMAGE-NAME.jpg" alt="IMAGE-NAME.jpg">-->
+		<!--</a>-->
+	</div>
+	<span class="pageText">&copy; All copyright remains with the original photographer. No pictures to be reproduced without permission.</span>
+	<!-- Bottom block for ease of viewing images upon scrolling-->
+	<div id="bottom-block"></div>
+</div>
+
+<script>
+	// Set page title
+	var pageTitle = document.getElementById("pageTitle");
+	var pathName = location.pathname;
+	pageTitle.innerHTML = "Pictures in: " + pathName.substring(0, pathName.lastIndexOf("/")) + "/";
+
+	// List of file extension you want to go through
+	var fileExtensions = [".jpg", ".jpeg", ".png"];
+
+	// Empty list of file names to populate
+	var fileNames = [];
+
+	// Create and open a new HTTP Request
+	var xmlHttpRequest = new XMLHttpRequest();
+	xmlHttpRequest.open("GET", "./");
+
+	// Callback to call when request is done
+	xmlHttpRequest.onreadystatechange = function () {
+		if (xmlHttpRequest.readyState == XMLHttpRequest.DONE && xmlHttpRequest.status == 200) {
+			// Get response data into a usable format
+			var responseData = document.createElement("div");
+			responseData.innerHTML = xmlHttpRequest.response;
+
+			// Cycle through file extension array
+			// Populate fileNames array with list of appropriate files
+			for (var i = 0; i < fileExtensions.length; i++) {
+				// Create a regular expression using file extension
+				var fileExtension = fileExtensions[i];
+				var regularExpression = new RegExp(".*\\" + fileExtension, "i");
+
+				// Get all <a> tags from response data
+				var aTags = responseData.getElementsByTagName("a");
+
+				// For each <a> tag href that matches the regular expression, add it to the fileNames list
+				for (var k = 0; k < aTags.length; k++) {
+					var a = aTags[k];
+					if (a.href.match(regularExpression)) {
+						fileNames.push(a.href)
+					}
+				}
+			}
+
+			// Sort fileNames alphabetically rather than by type
+			fileNames.sort();
+
+			// Loop through list of Files
+			for (var j = 0; j < fileNames.length; j++) {
+				const fileName = fileNames[j];
+
+				// Create a new image object (300px x 300px) and render it invisible
+				const image = new Image(300, 300);
+				image.style.visibility = "hidden";
+
+				// Call back function for action to take when image has been fully loaded
+				image.onload = function () {
+					// Get original dimensions
+					var imageWidth = image.naturalWidth;
+					var imageHeight = image.naturalHeight;
+
+					// Set display dimensions so images sit flush with one another
+					if (imageWidth > imageHeight) {
+						image.style.width = "100%";
+						image.removeAttribute("height")
+					}
+					else {
+						image.style.height = "100%";
+						image.removeAttribute("width")
+					}
+					// Now that image has been rendered and sized, show it
+					image.style.visibility = "visible";
+				};
+				// Load image in (this is will call the onload callback function when done)
+				image.src = fileName;
+
+				// Create image wrapper to contain image and link to original image
+				var imageWrapper = document.createElement("a");
+				imageWrapper.setAttribute("class", "imageWrapper");
+				imageWrapper.setAttribute("href", fileName);
+
+				// Set image attributes for styling
+				image.setAttribute("class", "image");
+				image.setAttribute("alt", fileName);
+
+				// Inject image into wrapper and inject wrapper into image container on page
+				imageWrapper.appendChild(image);
+				document.getElementById("allImages").appendChild(imageWrapper);
+			}
+		}
+	};
+
+	// Send request to kick things off and call the callback!
+	xmlHttpRequest.send();
+</script>
+</body>
+</html>
