@@ -1,2 +1,11 @@
 # pics
-A file for displaying pictures from a File Server
+
+A system for displaying pictures from a File Server.
+
+## Usage
+
+Put the file next to your other files in your File Server and make them accessible via a browser, like such:
+
+<img src="./docs/example-screenshot.png" />
+
+Then open your browser and navigate to the pics.htm file.
