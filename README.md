@@ -6,6 +6,6 @@ A system for displaying pictures from a File Server.
 
 Put the file next to your other files in your File Server and make them accessible via a browser, like such:
 
-<img src="./docs/example-screenshot.png" />
+<img src="./docs/example-screenshot.png" width="50%"/>
 
 Then open your browser and navigate to the pics.htm file.
