@@ -81,40 +81,40 @@
 
 <script>
 	// Set page title
-	var pageTitle = document.getElementById("pageTitle");
-	var pathName = location.pathname;
+	const pageTitle = document.getElementById("pageTitle");
+	const pathName = location.pathname;
 	pageTitle.innerHTML = "Pictures in: " + pathName.substring(0, pathName.lastIndexOf("/")) + "/";
 
 	// List of file extension you want to go through
-	var fileExtensions = [".jpg", ".jpeg", ".png"];
+	const fileExtensions = [".jpg", ".jpeg", ".png"];
 
 	// Empty list of file names to populate
-	var fileNames = [];
+	const fileNames = [];
 
 	// Create and open a new HTTP Request
-	var xmlHttpRequest = new XMLHttpRequest();
+	const xmlHttpRequest = new XMLHttpRequest();
 	xmlHttpRequest.open("GET", "./");
 
 	// Callback to call when request is done
 	xmlHttpRequest.onreadystatechange = function () {
 		if (xmlHttpRequest.readyState === XMLHttpRequest.DONE && xmlHttpRequest.status === 200) {
 			// Get response data into a usable format
-			var responseData = document.createElement("div");
+			const responseData = document.createElement("div");
 			responseData.innerHTML = xmlHttpRequest.response;
 
 			// Cycle through file extension array
 			// Populate fileNames array with list of appropriate files
-			for (var i = 0; i < fileExtensions.length; i++) {
+			for (let i = 0; i < fileExtensions.length; i++) {
 				// Create a regular expression using file extension
-				var fileExtension = fileExtensions[i];
-				var regularExpression = new RegExp(".*\\" + fileExtension, "i");
+				const fileExtension = fileExtensions[i];
+				const regularExpression = new RegExp(".*\\" + fileExtension, "i");
 
 				// Get all <a> tags from response data
-				var aTags = responseData.getElementsByTagName("a");
+				const aTags = responseData.getElementsByTagName("a");
 
 				// For each <a> tag href that matches the regular expression, add it to the fileNames list
-				for (var k = 0; k < aTags.length; k++) {
-					var a = aTags[k];
+				for (let k = 0; k < aTags.length; k++) {
+					const a = aTags[k];
 					if (a.href.match(regularExpression)) {
 						fileNames.push(a.href)
 					}
@@ -125,7 +125,7 @@
 			fileNames.sort();
 
 			// Loop through list of Files
-			for (var j = 0; j < fileNames.length; j++) {
+			for (let j = 0; j < fileNames.length; j++) {
 				const fileName = fileNames[j];
 
 				// Create a new image object (300px x 300px) and render it invisible
@@ -135,8 +135,8 @@
 				// Call back function for action to take when image has been fully loaded
 				image.onload = function () {
 					// Get original dimensions
-					var imageWidth = image.naturalWidth;
-					var imageHeight = image.naturalHeight;
+					const imageWidth = image.naturalWidth;
+					const imageHeight = image.naturalHeight;
 
 					// Set display dimensions so images sit flush with one another
 					if (imageWidth > imageHeight) {
@@ -154,7 +154,7 @@
 				image.src = fileName;
 
 				// Create image wrapper to contain image and link to original image
-				var imageWrapper = document.createElement("a");
+				const imageWrapper = document.createElement("a");
 				imageWrapper.setAttribute("class", "imageWrapper");
 				imageWrapper.setAttribute("href", fileName);
 
