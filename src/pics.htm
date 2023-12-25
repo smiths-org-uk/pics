@@ -104,19 +104,16 @@
 
 			// Cycle through file extension array
 			// Populate fileNames array with list of appropriate files
-			for (let i = 0; i < fileExtensions.length; i++) {
-				// Create a regular expression using file extension
-				const fileExtension = fileExtensions[i];
+			for (const fileExtension in fileExtensions) {
 				const regularExpression = new RegExp(".*\\" + fileExtension, "i");
 
 				// Get all <a> tags from response data
 				const aTags = responseData.getElementsByTagName("a");
 
 				// For each <a> tag href that matches the regular expression, add it to the fileNames list
-				for (let k = 0; k < aTags.length; k++) {
-					const a = aTags[k];
-					if (a.href.match(regularExpression)) {
-						fileNames.push(a.href)
+				for (const aTag in aTags) {
+					if (aTag.href.match(regularExpression)) {
+						fileNames.push(aTag.href)
 					}
 				}
 			}
@@ -125,9 +122,7 @@
 			fileNames.sort();
 
 			// Loop through list of Files
-			for (let j = 0; j < fileNames.length; j++) {
-				const fileName = fileNames[j];
-
+			for (const fileName in fileNames) {
 				// Create a new image object (300px x 300px) and render it invisible
 				const image = new Image(300, 300);
 				image.style.visibility = "hidden";
