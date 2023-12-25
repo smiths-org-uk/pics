@@ -110,8 +110,9 @@
 				// Get all <a> tags from response data
 				const aTags = responseData.getElementsByTagName("a");
 
+				// aTags is a HTMLCollection, so use for...of to loop
 				// For each <a> tag href that matches the regular expression, add it to the fileNames list
-				for (const aTag in aTags) {
+				for (const aTag of aTags) {
 					if (aTag.href.match(regularExpression)) {
 						fileNames.push(aTag.href)
 					}
