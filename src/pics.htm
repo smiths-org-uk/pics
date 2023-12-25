@@ -97,7 +97,7 @@
 
 	// Callback to call when request is done
 	xmlHttpRequest.onreadystatechange = function () {
-		if (xmlHttpRequest.readyState == XMLHttpRequest.DONE && xmlHttpRequest.status == 200) {
+		if (xmlHttpRequest.readyState === XMLHttpRequest.DONE && xmlHttpRequest.status === 200) {
 			// Get response data into a usable format
 			var responseData = document.createElement("div");
 			responseData.innerHTML = xmlHttpRequest.response;
